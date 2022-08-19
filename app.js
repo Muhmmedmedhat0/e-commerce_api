@@ -3,13 +3,32 @@ const PORT = process.env.PORT || 3000;
 const express = require('express');
 require('./database/config');
 const app = express();
-const userRouter = require('./routes/user_route');
-const authRouter = require('./routes/auth_route');
+const cors = require('cors');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+const productRouter = require('./routes/product');
+const cartRouter = require('./routes/cart');
+const orderRouter = require('./routes/order');
+const paymenttRouter = require('./routes/stripe');
 
+app.use(cors());
 app.use(express.json());
 
-app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/payment', paymenttRouter);
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  const status = err.statusCode || 500;
+  const message = err.message;
+  const data = err.data;
+  console.log(err);
+  res.status(status).json({ message: message, data: data });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
