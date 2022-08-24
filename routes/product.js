@@ -3,7 +3,7 @@ const productController = require('../controllers/product');
 const { verifyTokenAndAdmin } = require('../middleware/verifyToken');
 
 // /api/products => POST
-router.post('/', productController.create);
+router.post('/', verifyTokenAndAdmin, productController.create);
 
 // /api/products/:id => =>PUT
 router.put('/:id', verifyTokenAndAdmin, productController.productUpdate);
