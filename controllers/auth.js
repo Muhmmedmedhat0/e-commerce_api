@@ -24,19 +24,21 @@ exports.login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: email });
     // if user not found
-    !user && res.status(401).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(400).json({ message: 'email does is wrong!' });
+    }
     const decryptedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.PASS_KEY
     ).toString(CryptoJS.enc.Utf8);
 
     // if password is wrong
-    decryptedPassword !== req.body.password &&
-      res.status(401).json({ message: 'Wrong password' });
+    if (decryptedPassword !== req.body.password) {
+      return res.status(422).json({ message: 'wrong password!' });
+    }
 
     // create token if everything is ok
-    const token = jwt.sign(
-      {
+    const token = jwt.sign({
         id: user._id,
         isAdmin: user.isAdmin,
       },
@@ -48,7 +50,9 @@ exports.login = async (req, res, next) => {
     const { password, ...userData } = user._doc;
     res.status(200).json({ ...userData, token });
   } catch (error) {
-    res.status(500).json({ message: error });
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
     next(error);
   }
 };

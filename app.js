@@ -21,15 +21,14 @@ app.use('/api/cart', cartRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/payment', paymenttRouter);
 
-// error handling middleware
+// error handling middleware - must be last in the chain of middleware (after all other middleware)
 app.use((err, req, res, next) => {
+  console.log(err.stack);
   const status = err.statusCode || 500;
-  const message = err.message;
+  const message = err.message || 'Internal Server err';
   const data = err.data;
-  console.log(err);
   res.status(status).json({ message: message, data: data });
 });
-
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
