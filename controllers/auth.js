@@ -25,7 +25,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email: email });
     // if user not found
     if (!user) {
-      return res.status(400).json({ message: 'email does is wrong!' });
+      return res.status(400).json({ message: 'email is wrong!' });
     }
     const decryptedPassword = CryptoJS.AES.decrypt(
       user.password,
