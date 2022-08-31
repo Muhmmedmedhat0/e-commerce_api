@@ -38,7 +38,8 @@ exports.login = async (req, res, next) => {
     }
 
     // create token if everything is ok
-    const token = jwt.sign({
+    const token = jwt.sign(
+      {
         id: user._id,
         isAdmin: user.isAdmin,
       },
@@ -48,7 +49,7 @@ exports.login = async (req, res, next) => {
 
     // if everything is ok send token and user
     const { password, ...userData } = user._doc;
-    res.status(200).json({ ...userData, token });
+    res.cookie('token', token, { httpOnly: true }).status(200).json({ ...userData, token });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
