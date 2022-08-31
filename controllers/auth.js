@@ -49,7 +49,7 @@ exports.login = async (req, res, next) => {
 
     // if everything is ok send token and user
     const { password, ...userData } = user._doc;
-    res.cookie('token', token, { httpOnly: true }).status(200).json({ ...userData, token });
+    res.cookie('token', token, { httpOnly: true }).status(200).json({ ...userData});
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
