@@ -11,8 +11,8 @@ router.put('/:id', verifyTokenAndAuthorization, usrController.userUpdate);
 // /api/users/:id =>DELETE
 router.delete('/:id', verifyTokenAndAuthorization, usrController.userDelete);
 
-// /api/users/ =>GET
-router.get('/', verifyTokenAndAdmin, usrController.userGetAll);
+// fetch new users /api/users/?new=true OR fetch all users api/users
+router.get('/', verifyTokenAndAdmin, usrController.getUsers);
 
 // /api/status/ =>GET
 router.get('/status', verifyTokenAndAdmin, usrController.userStatus);

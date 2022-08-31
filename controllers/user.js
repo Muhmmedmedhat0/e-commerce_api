@@ -38,8 +38,8 @@ exports.userDelete = async (req, res, next) => {
     res.status(500).json({ message: error });
   }
 };
-// get all users
-exports.userGetAll = async (req, res, next) => {
+// get new users with query or gat allusers
+exports.getUsers = async (req, res, next) => {
   const query = req.query.new;
   try {
     const users = query
