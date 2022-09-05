@@ -61,14 +61,22 @@ exports.getAllOrders = async (req, res, next) => {
   }
 };
 // get monthly income
-exports.getMonthlyIncome = async (req, res, next) => {
+exports.getIncome = async (req, res, next) => {
+  const productId = req.query.id;
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
   const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
   // aggregate function to get monthly income
   try {
     const income = await Order.aggregate([
-      { $match: { createdAt: { $gte: previousMonth } } },
+      {
+        $match: {
+          createdAt: { $gte: previousMonth },
+          ...(productId && {
+            products: { $elemMatch: { productId: productId } },
+          }),
+        },
+      },
       {
         $project: {
           month: { $month: '$createdAt' },

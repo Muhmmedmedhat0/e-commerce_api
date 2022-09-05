@@ -26,6 +26,6 @@ router.get(
 router.get('/', verifyTokenAndAdmin, orderController.getAllOrders);
 
 // /api/orders/income => GET
-router.get('/income', verifyTokenAndAdmin, orderController.getMonthlyIncome);
+router.get('/income', verifyTokenAndAdmin, orderController.getIncome);
 
 module.exports = router;
